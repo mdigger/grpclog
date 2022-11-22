@@ -1,0 +1,136 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "options": {
+        "env": {
+            "server_addr": "localhost:3000",
+            "proto_path": "proto"
+        }
+    },
+    "tasks": [
+        {
+            "label": "protolint",
+            "detail": "Проверить валидность описания API",
+            "type": "shell",
+            "group": "test",
+            "command": "protolint -reporter unix -fix $proto_path/",
+            "hide": true,
+            "presentation": {
+                "revealProblems": "onProblem"
+            },
+            "problemMatcher": {
+                "owner": "proto-lint",
+                "source": "proto-lint",
+                "base": "$go",
+                "severity": "warning"
+            }
+        },
+        {
+            "label": "protoc",
+            "detail": "Сгеренировать файлы поддержки API",
+            "type": "shell",
+            "group": "build",
+            "command": "protoc",
+            "args": [
+                "--proto_path=$proto_path",
+                "--descriptor_set_out=$proto_path/service.protoset",
+                "--include_imports",
+                "--include_source_info",
+                "--go_out=.",
+                "--go-grpc_out=.",
+                "--lint_out=.",
+                "--error_format=msvs",
+                "$proto_path/*.proto"
+            ],
+            "presentation": {
+                "revealProblems": "onProblem"
+            },
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "source": "protoc",
+                "owner": "protoc",
+                "pattern": {
+                    "regexp": "^(.*)\\((\\d+)\\)\\s+:\\s+(.+)\\s+in column=(\\d+):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "dependsOn": [
+                "protolint"
+            ]
+        },
+        {
+            "label": "golangci-lint",
+            "detail": "Валидация кода Golang",
+            "type": "process",
+            "group": "test",
+            "command": "golangci-lint",
+            "args": [
+                "run",
+                "--fix",
+                "--allow-parallel-runners",
+                "--out-format",
+                "tab",
+                "./..."
+            ],
+            "presentation": {
+                "revealProblems": "onProblem"
+            },
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "source": "golangci-lint",
+                "owner": "golangci-lint",
+                "severity": "warning",
+                "pattern": {
+                    "regexp": "^(.+):(\\d+):(\\d+)\\s+(.+?)\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 5,
+                    "code": 4
+                }
+            }
+        },
+        {
+            "label": "grpcui",
+            "detail": "Запуск веб сервера с проверки gRPC запросов",
+            "type": "shell",
+            "group": "test",
+            "command": "grpcui",
+            "args": [
+                "-plaintext",
+                "-use-reflection",
+                "-protoset",
+                "$proto_path/service.protoset",
+                "-rpc-header",
+                "$user_id",
+                "-open-browser",
+                "$server_addr"
+            ],
+            "dependsOn": [
+                "protoc"
+            ]
+        },
+        {
+            "label": "go mod update",
+            "detail": "Обновление используемых библиотек Golang",
+            "type": "shell",
+            "group": "build",
+            "command": "go get -u -v ./... && go mod tidy -v",
+            "presentation": {
+                "revealProblems": "onProblem"
+            },
+            "problemMatcher": "$go"
+        },
+   ]
+}

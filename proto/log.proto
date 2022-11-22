@@ -1,0 +1,51 @@
+// Отладочный сервис с удалённым доступом к логам в реальном времени.
+syntax = "proto3";
+
+package mdigger.log.v1;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "/api/v1;api";
+
+// Сервис для отправки логов в реальном времени.
+service LogService {
+  // возвращает поток с сообщениями лога звонков
+  rpc Logs(google.protobuf.Empty) returns (stream LogItem);
+}
+
+// Описание элементов лога.
+message LogItem {
+  // идентификатор записи лога (счётчик);
+  // заполняется автоматически при отправке
+  uint64 id = 1;
+
+  // Определение уровня лога
+  enum Level {
+    // информация
+    LEVEL_INFO = 0; //protolint:disable:this ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+
+    // предупреждение
+    LEVEL_WARNING = 1;
+
+    // ошибка
+    LEVEL_ERROR = 2;
+
+    // фатальная ошибка
+    LEVEL_FATAL = 3;
+
+    // отладочный уровень
+    LEVEL_DEBUG = -1;
+
+    // уровень трассировки
+    LEVEL_TRACE = -2;
+  }
+
+  // уровень лога
+  Level level = 2;
+
+  // сообщение
+  string message = 3;
+
+  // дополнительная информация
+  map<string,string> fields = 4;
+}

@@ -1,0 +1,8 @@
+version: "0.2"
+ignorePaths:
+  - third_party
+  - api
+  - cspell.config.yaml
+words:
+ignoreWords:
+  - zerolog

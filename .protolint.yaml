@@ -1,0 +1,12 @@
+lint:
+  directories:
+    exclude:
+      - third_party
+  rules:
+    all_default: true
+  rules_option:
+    max_line_length:
+      max_chars: 120
+    indent:
+      style: 2
+      not_insert_newline: true

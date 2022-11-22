@@ -1,0 +1,21 @@
+linters-settings:
+  goimports:
+    local-prefixes:  github.com/mdigger
+  cyclop:
+    skip-tests: true
+  funlen:
+    lines: 120
+    statements: 50
+  gosec:
+    exclude-generated: true
+  
+issues:
+  fix: true
+  exclude-rules:
+    - path: '(.+)_test\.go'
+      linters:
+        - gochecknoinits
+        - wrapcheck
+        - gosec
+        - funlen
+        - goconst

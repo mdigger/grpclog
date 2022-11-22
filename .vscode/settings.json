@@ -1,0 +1,7 @@
+{
+    "search.exclude": {
+        "./api": true,
+        "./third_party": true
+    },
+    "go.testEnvFile": "${workspaceFolder}/local.env"
+}
