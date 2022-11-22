@@ -15,7 +15,7 @@ func fields2map(fields []any) map[string]string {
 
 	// формируем список именованных полей с их значениями
 	attrs := make(map[string]string, len(fields)/2)
-	for i := 0; i < len(fields)/2; i += 2 {
+	for i := 0; i < len(fields); i++ {
 		// в зависимости от типа информации преобразуем её в имя и значение
 		switch v := fields[i].(type) {
 		case string:
@@ -26,20 +26,19 @@ func fields2map(fields []any) map[string]string {
 			if v != nil {
 				attrs["error"] = v.Error()
 			}
-			i--
 			continue
 		case map[string]string:
 			for k, v := range v {
 				attrs[k] = v
 			}
-			i--
+			continue
 		case map[string]any:
 			for k, v := range v {
 				attrs[k] = fmt.Sprint(v)
 			}
-			i--
-		default: // игнорируем неподдерживаемые имена и их значения
+			continue
 		}
+		i++ // увеличиваем счётчик на прочитанное значение
 	}
 
 	return attrs
