@@ -7,8 +7,11 @@ require (
 	google.golang.org/protobuf v1.28.1
 )
 
+require golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
+
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/samber/lo v1.35.0
 	golang.org/x/net v0.2.0 // indirect
 	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
