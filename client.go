@@ -62,9 +62,9 @@ var (
 
 // Print выводит в форматированном виде запись лога в os.Stdout.
 func Print(logmsg *Item) {
-	fmt.Printf("%4d %v %3s %s",
-		logmsg.Id,                             // счётчик
+	fmt.Printf("%v %4d %3s %s",
 		time.Now().Local().Format("15:04:05"), // локальное время
+		logmsg.Id,                             // счётчик
 		levelShortnames[logmsg.Level],         // уровень сообщения
 		logmsg.Message)                        // текст сообщения
 
