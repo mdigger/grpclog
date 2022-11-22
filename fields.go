@@ -14,7 +14,7 @@ func fields2map(fields []any) map[string]string {
 	}
 
 	// формируем список именованных полей с их значениями
-	attrs := make(map[string]string, len(fields)/2)
+	attrs := make(map[string]string)
 	for i := 0; i < len(fields); i++ {
 		// в зависимости от типа информации преобразуем её в имя и значение
 		switch v := fields[i].(type) {
