@@ -2,6 +2,9 @@ package grpclog
 
 import "fmt"
 
+// F используется как синомим для списка именованных полей.
+type F = map[string]any
+
 // fields2map конвертирует список последовательностей в именнованные значения.
 // Используется для разбора дополнительных полей лога.
 func fields2map(fields []any) map[string]string {
